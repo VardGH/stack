@@ -1,6 +1,18 @@
 #include <iostream>
 #include "stack.hpp"
 
+namespace test 
+{
+    void test_stack();
+}
+
+int main() 
+{
+    test::test_stack();
+
+    return 0;
+}
+
 namespace test
 {
     
@@ -70,10 +82,3 @@ void test_stack()
 }
 
 } // namespace test
-
-int main() 
-{
-    test::test_stack();
-
-    return 0;
-}
