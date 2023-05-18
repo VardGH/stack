@@ -1,35 +1,36 @@
 #include "stack.hpp"
+
 namespace adapter {
 
 template <typename T>
 Stack<T>::Stack() 
-    : container::Vector<T>() 
-    {
-    }
+    : parent() 
+{
+}
 
 template <typename T>
 Stack<T>::Stack(size_t size)
-    : container::Vector<T>(size)
-    {
-    }
+    : parent(size)
+{
+}
 
 template <typename T>
 Stack<T>::Stack(const Stack& other) 
-    : container::Vector<T>(other) 
-    {
-    }
+    : parent(other) 
+{
+}
 
 template <typename T>
 Stack<T>::Stack(Stack&& other)
-    : container::Vector<T>(std::move(other))
-    {
-    }
+    : parent(std::move(other))
+{
+}
 
 template <typename T>
 Stack<T>& Stack<T>::operator=(const Stack<T>& other)
 {
     if (this != &other) {
-        container::Vector<T>::operator=(other);
+        parent::operator=(other);
     }
     return *this;
 }
@@ -38,7 +39,7 @@ template <typename T>
 Stack<T>& Stack<T>::operator=(Stack&& other)
 {
     if (this != &other) {
-        container::Vector<T>::operator=(std::move(other));
+        parent::operator=(std::move(other));
     }
     return *this;
 }
@@ -51,14 +52,20 @@ Stack<T>::~Stack()
 template <typename T>
 void Stack<T>::push(const T& value)
 {
-    container::Vector<T>::push_back(value);
+    parent::push_back(value);
+}
+
+template <typename T>
+bool Stack<T>::empty() const
+{
+    return parent::empty();
 }
 
 template <typename T>
 void Stack<T>::pop()
 {
-    if (container::Vector<T>::size() > 0) {
-        container::Vector<T>::pop_back();
+    if (!(this->empty())) {
+        parent::pop_back();
     } else {
         throw std::runtime_error("Stack is empty. Cannot pop().");
     }
@@ -67,25 +74,19 @@ void Stack<T>::pop()
 template <typename T>
 T& Stack<T>::top()
 {
-    return container::Vector<T>::back();
+    return parent::back();
 }
 
 template <typename T>
 const T& Stack<T>::top() const
 {
-    return container::Vector<T>::back();
+    return parent::back();
 }
 
 template <typename T>
 size_t Stack<T>::size() const
 {
-    return container::Vector<T>::size();
-}
-
-template <typename T>
-bool Stack<T>::empty() const
-{
-    return container::Vector<T>::size() == 0;
+    return parent::size();
 }
 
 } // namespace adapter 
