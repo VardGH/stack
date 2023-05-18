@@ -9,6 +9,9 @@ template <typename T>
 class Stack : private container::Vector<T>
 {
 public:
+
+    using parent = container::Vector<T>;
+
     Stack();
     Stack(size_t size);
     Stack(const Stack& other);  // copy ctor
