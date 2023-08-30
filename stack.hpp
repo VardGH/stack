@@ -1,31 +1,36 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 
+#include <vector>
+
 namespace adapter {
 
-#include "vector.hpp"
-
 template <typename T>
-class Stack : private container::Vector<T>
+class stack
 {
 public:
+    stack(); // Default constructor
+    explicit stack(const int size); // Constructor with parameter
 
-    using parent = container::Vector<T>;
+    stack(const stack& other); // Copy constructor
+    stack& operator=(const stack& other);  // Copy assignment operator
 
-    Stack();
-    Stack(size_t size);
-    Stack(const Stack& other);  // copy ctor
-    Stack(Stack&& other);       // move ctor
-    Stack& operator=(const Stack& other);  // copy assignment operator
-    Stack& operator=(Stack&& other);       // move assignment operator
-    ~Stack(); // dtor
+    stack(stack&& other); // Move constructor
+    stack& operator=(stack&& other); // Move assignment operator
+
+    ~stack() = default; // Destructor
+
 public:
-    void push(const T& value);
-    void pop();
-    T& top();
-    const T& top() const;
-    size_t size() const;
-    bool empty() const;
+    void push(const T& value); // Pushes an element onto the top of the stack.
+    void pop(); // Removes the top element from the stack.
+    T& top(); // Returns a reference to the top element of the stack.
+    const T& top() const; // Returns a const reference to the top element.
+    size_t size() const; // Returns the number of elements in the stack.
+    bool empty() const; //  Checks if the stack is empty.
+
+private:
+    std::vector<T> m_arr;
+    int m_index;
 };
 
 } // namespace adapter

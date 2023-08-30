@@ -1,92 +1,99 @@
-#include "stack.hpp"
+#ifndef STACK_IMPL_HPP
+#define STACK_IMPL_HPP
+
+#include <stdexcept>
 
 namespace adapter {
 
 template <typename T>
-Stack<T>::Stack() 
-    : parent() 
+stack<T>::stack() 
+    : m_index(-1) 
 {
 }
 
 template <typename T>
-Stack<T>::Stack(size_t size)
-    : parent(size)
+stack<T>::stack(const int size) 
+    : m_arr(size)
+    , m_index(-1) 
 {
 }
 
 template <typename T>
-Stack<T>::Stack(const Stack& other) 
-    : parent(other) 
+stack<T>::stack(const stack& other) 
+    : m_arr(other.m_arr)
+    , m_index(other.m_index) 
 {
 }
 
 template <typename T>
-Stack<T>::Stack(Stack&& other)
-    : parent(std::move(other))
-{
-}
-
-template <typename T>
-Stack<T>& Stack<T>::operator=(const Stack<T>& other)
+stack<T>& stack<T>::operator=(const stack& other) 
 {
     if (this != &other) {
-        parent::operator=(other);
+        m_arr = other.m_arr;
+        m_index = other.m_index;
     }
     return *this;
 }
 
 template <typename T>
-Stack<T>& Stack<T>::operator=(Stack&& other)
+stack<T>::stack(stack&& other) 
+    : m_arr(std::move(other.m_arr))
+    , m_index(other.m_index)
+{
+}
+
+template <typename T>
+stack<T>& stack<T>::operator=(stack&& other) 
 {
     if (this != &other) {
-        parent::operator=(std::move(other));
+        m_arr = std::move(other.m_arr);
+        m_index = other.m_index;
     }
     return *this;
 }
 
 template <typename T>
-Stack<T>::~Stack() 
+void stack<T>::push(const T& value) 
 {
+    m_arr.push_back(value);
+    ++m_index;
 }
 
 template <typename T>
-void Stack<T>::push(const T& value)
+void stack<T>::pop() 
 {
-    parent::push_back(value);
-}
-
-template <typename T>
-bool Stack<T>::empty() const
-{
-    return parent::empty();
-}
-
-template <typename T>
-void Stack<T>::pop()
-{
-    if (!(this->empty())) {
-        parent::pop_back();
+    if (!empty()) {
+        m_arr.pop_back();
+        --m_index;
     } else {
-        throw std::runtime_error("Stack is empty. Cannot pop().");
+        throw std::runtime_error("Attempted to pop from an empty stack");
     }
 }
 
 template <typename T>
-T& Stack<T>::top()
+T& stack<T>::top() 
 {
-    return parent::back();
+    return m_arr[m_index];
 }
 
 template <typename T>
-const T& Stack<T>::top() const
+const T& stack<T>::top() const 
 {
-    return parent::back();
+    return m_arr[m_index];
 }
 
 template <typename T>
-size_t Stack<T>::size() const
+size_t stack<T>::size() const 
 {
-    return parent::size();
+    return m_arr.size();
 }
 
-} // namespace adapter 
+template <typename T>
+bool stack<T>::empty() const 
+{
+    return m_arr.empty();
+}
+
+} // namespace adapter
+
+#endif // STACK_IMPL_HPP
